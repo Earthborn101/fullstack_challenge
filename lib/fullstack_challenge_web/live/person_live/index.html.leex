@@ -1,0 +1,52 @@
+<h1 class="text-red-500 text-5xl font-bold text-center">Tailwind CSS</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Quality(%)</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <%= f = form_for @changeset, "#",
+          id: "person-form",
+          phx_change: "validate",
+          phx_submit: "save"
+        %>
+          <th>
+            <%= text_input f, :name %>
+            <%= error_tag f, :name %>
+          </th>
+          <th>
+            <%= number_input f, :percentage %>
+            <%= error_tag f, :percentage %>
+          </th>
+          <th>
+            <%= submit "Save", phx_disable_with: "Saving..." %>
+          </th>
+        </form>
+    </tr>
+    <tr>
+    <th>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quality(%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for person <- @list_of_person do %>
+            <tr>
+              <th><%= person.name %></th>
+              <th><%= person.percentage %></th>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </th>
+    <th></th>
+    </tr>
+  </tbody>
+</table>

@@ -17,7 +17,7 @@ defmodule FullstackChallengeWeb.Router do
   scope "/", FullstackChallengeWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    live "/", PersonLive.Index, :index
   end
 
   # Other scopes may use custom stacks.
@@ -32,12 +32,5 @@ defmodule FullstackChallengeWeb.Router do
   # If your application does not have an admins-only section yet,
   # you can use Plug.BasicAuth to set up some basic authentication
   # as long as you are also using SSL (which you should anyway).
-  if Mix.env() in [:dev, :test] do
-    import Phoenix.LiveDashboard.Router
 
-    scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: FullstackChallengeWeb.Telemetry
-    end
-  end
 end
