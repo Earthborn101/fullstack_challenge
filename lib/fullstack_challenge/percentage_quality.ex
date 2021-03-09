@@ -18,10 +18,48 @@ defmodule FullstackChallenge.PercentageQuality do
     %Person{}
     |> Person.changeset(params)
     |> Repo.insert()
+    |> broadcast(:created)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(FullstackChallenge.PubSub, "post")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:ok, post}, event) do
+    Phoenix.PubSub.broadcast(FullstackChallenge.PubSub, "post", {event, post})
+    {:ok, post}
   end
 
   def get_persons do
-    Repo.all(Person)
+    Person
+    |> order_by([p], asc: p.name)
+    |> Repo.all()
+  end
+
+  def get_percentage_amount(list) do
+    %{}
+    |> get_name_group("AI", list)
+    |> get_name_group("JR", list)
+    |> get_name_group("SZ", list)
+  end
+
+  defp get_name_group(map, name_group, list) do
+    list =
+      list
+      |> Enum.filter(&(&1.name_group == name_group))
+
+    if Enum.empty?(list) do
+      map
+    else
+      list_sum =
+        list
+        |> Enum.map(&(&1.percentage))
+        |> Enum.sum()
+
+      map
+      |> Map.put(name_group, list_sum)
+    end
   end
 
   defp add_name_group(%{"name" => name} = params) do

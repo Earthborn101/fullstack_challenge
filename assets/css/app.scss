@@ -93,3 +93,64 @@
   display: block;
   margin: -1rem 0 2rem;
 }
+
+#skills {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 30px auto;
+}
+
+.circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.animate {
+  -webkit-transition: 0.2s cubic-bezier(.74,1.13,.83,1.2);
+  -moz-transition: 0.2s cubic-bezier(.74,1.13,.83,1.2);
+  -o-transition: 0.2s cubic-bezier(.74,1.13,.83,1.2);
+  transition: 0.2s cubic-bezier(.74,1.13,.83,1.2);
+}
+
+.animate:hover {
+  transform: scale(1.1);
+  transform-origin: center center;
+}
+
+.main-table {
+  max-width: 100%;
+  border:0px;
+  outline:0px;
+}
+
+table td {
+  border: 0.0;
+}
+
+.txt-mar-5{
+  margin: 5px;
+}
+
+.w-1-2 {
+  width: 50%;
+}
+
+.input-row{
+  color: white;
+}
+
+#size {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+canvas {
+  vertical-align: middle;
+  width: auto !important;
+  height: 400px !important;
+  // padding-right: 500px;
+}

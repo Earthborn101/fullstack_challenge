@@ -1,52 +1,91 @@
-<h1 class="text-red-500 text-5xl font-bold text-center">Tailwind CSS</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Quality(%)</th>
-      <th></th>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <table class="table-fixed bg-black border-black	main-table" cellspacing="0" cellpadding="0">
+    <thead>
+      <tr>
+        <td class="text-white" colspan="2"><p class="txt-mar-5">Name</p></td>
+        <td class="text-white"><p class="txt-mar-5">Quality(%)</p></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <%= f = form_for @changeset, "#",
+          id: "person-form",
+          phx_change: "validate",
+          phx_submit: "save"
+        %>
+          <td colspan="2" class='input-row'>
+            <%= text_input f, :name %>
+          </td>
+          <td class='input-row'>
+            <%= number_input f, :percentage %>
+          </td>
+          <td class='input-row'>
+            <%= submit "Save", class: "bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded", phx_disable_with: "Saving..." %>
+          </td>
+        </form>
     </tr>
-  </thead>
-  <tbody>
     <tr>
         <%= f = form_for @changeset, "#",
           id: "person-form",
           phx_change: "validate",
           phx_submit: "save"
         %>
-          <th>
-            <%= text_input f, :name %>
-            <%= error_tag f, :name %>
-          </th>
-          <th>
-            <%= number_input f, :percentage %>
-            <%= error_tag f, :percentage %>
-          </th>
-          <th>
-            <%= submit "Save", phx_disable_with: "Saving..." %>
-          </th>
+          <td colspan="2" class='input-row'>
+            <div><%= error_tag f, :name %></div>
+          </td>
+          <td class='input-row'>
+            <div><%= error_tag f, :percentage %></div>
+          </td>
+          <td class='input-row'></td>
         </form>
     </tr>
-    <tr>
-    <th>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Quality(%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for person <- @list_of_person do %>
+  </table>
+    <div class="grid grid-cols-2 gap-1">
+      <div>
+        <table table class="table-fixed">
+          <thead>
             <tr>
-              <th><%= person.name %></th>
-              <th><%= person.percentage %></th>
+              <td class="w-1-2">Name</td>
+              <td class="w-1-4">Quality(%)</td>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </th>
-    <th></th>
-    </tr>
-  </tbody>
-</table>
+          </thead>
+          <tbody>
+            <%= for person <- @list_of_person do %>
+              <tr>
+                <td><%= person.name %></td>
+                <td><%= person.percentage %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <%= hidden_input :percentage_amount_ai, :percentage_amount_ai, id: "percentage_amount_ai", value: @percentage_amount["AI"] %>
+        <%= hidden_input :percentage_amount_jr, :percentage_amount_jr, id: "percentage_amount_jr", value: @percentage_amount["JR"] %>
+        <%= hidden_input :percentage_amount_sz, :percentage_amount_sz, id: "percentage_amount_sz", value: @percentage_amount["SZ"] %>
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+
+          function drawChart() {
+            const value_ai = document.getElementById('percentage_amount_ai').value
+            const value_jr = document.getElementById('percentage_amount_jr').value
+            const value_sz = document.getElementById('percentage_amount_sz').value
+            var data = google.visualization.arrayToDataTable([
+              ['Task', 'Hours per Day'],
+              ['A - I', Number(value_ai)],
+              ['J - R', Number(value_jr)],
+              ['S - Z', Number(value_sz)]
+            ]);
+
+            var options = {
+              title: 'My Daily Activities'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+      }
+    </script>
+        <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+      </div>
+</div>
