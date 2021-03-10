@@ -5,112 +5,37 @@ defmodule FullstackChallengeWeb.PersonLiveTest do
 
   alias FullstackChallenge.PercentageQuality
 
-  @create_attrs %{name: "some name", percentage: 42}
-  @update_attrs %{name: "some updated name", percentage: 43}
+  @create_attrs [%{name: "Ryan Adiao", percentage: 42}, %{name: "John Doe", percentage: 23}]
   @invalid_attrs %{name: nil, percentage: nil}
 
-  defp fixture(:person) do
-    {:ok, person} = PercentageQuality.create_person(@create_attrs)
-    person
-  end
+  defp create_person do
+    person =
+      @create_attrs
+      |> Enum.map(&(PercentageQuality.insert_person(&1)))
 
-  defp create_person(_) do
-    person = fixture(:person)
     %{person: person}
   end
 
-  describe "Index" do
-    setup [:create_person]
+  describe "Index_test" do
+    # setup [:create_person]
 
-    test "lists all person", %{conn: conn, person: person} do
+
+    test "lists all person", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, Routes.person_index_path(conn, :index))
-
-      assert html =~ "Listing Person"
-      assert html =~ person.name
+      assert html =~ "Person Quality"
     end
 
     test "saves new person", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.person_index_path(conn, :index))
 
-      assert index_live |> element("a", "New Person") |> render_click() =~
-               "New Person"
-
-      assert_patch(index_live, Routes.person_index_path(conn, :new))
-
-      assert index_live
-             |> form("#person-form", person: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
-
-      {:ok, _, html} =
+      {:ok, html} =
         index_live
-        |> form("#person-form", person: @create_attrs)
+        |> form("#person-form", person: %{"name"=> "New Name", "percentage"=> "45"})
         |> render_submit()
         |> follow_redirect(conn, Routes.person_index_path(conn, :index))
 
-      assert html =~ "Person created successfully"
-      assert html =~ "some name"
-    end
-
-    test "updates person in listing", %{conn: conn, person: person} do
-      {:ok, index_live, _html} = live(conn, Routes.person_index_path(conn, :index))
-
-      assert index_live |> element("#person-#{person.id} a", "Edit") |> render_click() =~
-               "Edit Person"
-
-      assert_patch(index_live, Routes.person_index_path(conn, :edit, person))
-
-      assert index_live
-             |> form("#person-form", person: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
-
-      {:ok, _, html} =
-        index_live
-        |> form("#person-form", person: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.person_index_path(conn, :index))
-
-      assert html =~ "Person updated successfully"
-      assert html =~ "some updated name"
-    end
-
-    test "deletes person in listing", %{conn: conn, person: person} do
-      {:ok, index_live, _html} = live(conn, Routes.person_index_path(conn, :index))
-
-      assert index_live |> element("#person-#{person.id} a", "Delete") |> render_click()
-      refute has_element?(index_live, "#person-#{person.id}")
-    end
-  end
-
-  describe "Show" do
-    setup [:create_person]
-
-    test "displays person", %{conn: conn, person: person} do
-      {:ok, _show_live, html} = live(conn, Routes.person_show_path(conn, :show, person))
-
-      assert html =~ "Show Person"
-      assert html =~ person.name
-    end
-
-    test "updates person within modal", %{conn: conn, person: person} do
-      {:ok, show_live, _html} = live(conn, Routes.person_show_path(conn, :show, person))
-
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Person"
-
-      assert_patch(show_live, Routes.person_show_path(conn, :edit, person))
-
-      assert show_live
-             |> form("#person-form", person: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
-
-      {:ok, _, html} =
-        show_live
-        |> form("#person-form", person: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.person_show_path(conn, :show, person))
-
-      assert html =~ "Person updated successfully"
-      assert html =~ "some updated name"
+      assert html.resp_body =~ "New Name"
+      assert html.resp_body =~ "45"
     end
   end
 end

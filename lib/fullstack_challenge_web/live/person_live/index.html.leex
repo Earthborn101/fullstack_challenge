@@ -7,12 +7,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
         <%= f = form_for @changeset, "#",
           id: "person-form",
           phx_change: "validate",
           phx_submit: "save"
         %>
+        <tr>
           <td colspan="2" class='input-row'>
             <%= text_input f, :name %>
           </td>
@@ -22,14 +22,8 @@
           <td class='input-row'>
             <%= submit "Save", class: "bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded", phx_disable_with: "Saving..." %>
           </td>
-        </form>
-    </tr>
-    <tr>
-        <%= f = form_for @changeset, "#",
-          id: "person-form",
-          phx_change: "validate",
-          phx_submit: "save"
-        %>
+          </tr>
+          <tr>
           <td colspan="2" class='input-row'>
             <div><%= error_tag f, :name %></div>
           </td>
@@ -37,8 +31,8 @@
             <div><%= error_tag f, :percentage %></div>
           </td>
           <td class='input-row'></td>
+          </tr>
         </form>
-    </tr>
   </table>
     <div class="grid grid-cols-2 gap-1">
       <div>
