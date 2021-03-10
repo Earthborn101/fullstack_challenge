@@ -11,10 +11,17 @@ use Mix.Config
 # before starting your production server.
 config :fullstack_challenge, FullstackChallengeWeb.Endpoint,
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
-
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 # Do not print debug messages in production
 config :logger, level: :info
+
+# Configure your database
+config :fullstack_challenge, FullstackChallenge.Repo,
+  url: System.get_env("DATABASE_URL"),
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10,
+  ssl: true
 
 # ## SSL Support
 #
@@ -52,4 +59,4 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
