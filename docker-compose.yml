@@ -18,6 +18,7 @@ services:
       MIX_ENV: dev
     env_file:
       - .env
+    image: "web-v.1"
     ports:
       - '4000:4000'
 volumes:

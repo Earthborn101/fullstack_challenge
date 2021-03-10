@@ -29,11 +29,15 @@ defmodule FullstackChallengeWeb.PersonLive.Index do
       |> PercentageQuality.validate_params()
       |> Map.put(:action, :validate)
 
+    IO.puts "Validate goes here"
+
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
   @impl true
   def handle_event("save", %{"person" => person_params}, socket) do
+    IO.puts "Save details"
+
     case PercentageQuality.insert_person(person_params) do
       {:ok, _result} ->
         socket =
@@ -42,6 +46,10 @@ defmodule FullstackChallengeWeb.PersonLive.Index do
         {:noreply, fetch(socket)}
       {:error, %Ecto.Changeset{} = changeset} -> {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  def handle_event(job, params, socket) do
+    IO.puts "No event called"
   end
 
   @impl true
