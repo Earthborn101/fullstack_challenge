@@ -1,11 +1,14 @@
 use Mix.Config
 
+database_url = System.get_env("DATABASE_URL")
+
 # Configure your database
 config :fullstack_challenge, FullstackChallenge.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "fullstack_challenge_dev",
-  hostname: "localhost",
+  # username: "postgres",
+  # password: "postgres",
+  # database: "fullstack_challenge_dev",
+  # hostname: "localhost",
+  url: database_url,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

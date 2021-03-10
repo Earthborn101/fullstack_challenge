@@ -35,7 +35,11 @@ defmodule FullstackChallengeWeb.PersonLive.Index do
   @impl true
   def handle_event("save", %{"person" => person_params}, socket) do
     case PercentageQuality.insert_person(person_params) do
-      {:ok, _result} -> {:noreply, fetch(socket)}
+      {:ok, _result} ->
+        socket =
+          socket
+          |> redirect(to: "/")
+        {:noreply, fetch(socket)}
       {:error, %Ecto.Changeset{} = changeset} -> {:noreply, assign(socket, :changeset, changeset)}
     end
   end
