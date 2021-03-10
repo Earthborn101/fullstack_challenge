@@ -85,4 +85,10 @@ defmodule FullstackChallenge.PercentageQuality do
     params
     |> Map.put("name_group", "SZ")
   end
+
+  def validate_person(name) do
+    Person
+    |> where([p], fragment("lower(?)", p.name) == fragment("lower(?)", ^name))
+    |> Repo.all()
+  end
 end

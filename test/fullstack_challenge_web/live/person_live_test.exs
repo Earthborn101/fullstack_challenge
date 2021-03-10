@@ -17,9 +17,6 @@ defmodule FullstackChallengeWeb.PersonLiveTest do
   end
 
   describe "Index_test" do
-    # setup [:create_person]
-
-
     test "lists all person", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, Routes.person_index_path(conn, :index))
       assert html =~ "Person Quality"

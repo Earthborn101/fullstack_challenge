@@ -2,6 +2,8 @@ defmodule FullstackChallenge.PercentageQuality.Person do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias FullstackChallenge.PercentageQuality
+
   schema "person" do
     field :name, :string
     field :percentage, :integer
@@ -21,6 +23,7 @@ defmodule FullstackChallenge.PercentageQuality.Person do
       message: "Invalid name group"
     )
     |> validate_params()
+    |> validate_name_if_exist()
   end
 
   def validate_changeset(person, attrs) do
@@ -37,5 +40,18 @@ defmodule FullstackChallenge.PercentageQuality.Person do
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 100
     )
+  end
+
+  defp validate_name_if_exist(%{changes: %{name: name}} = changeset) do
+    name
+    |> PercentageQuality.validate_person()
+    |> validate_name_if_exist(changeset)
+  end
+  defp validate_name_if_exist(changeset), do: changeset
+
+  defp validate_name_if_exist([], changeset), do: changeset
+  defp validate_name_if_exist(_, changeset) do
+    changeset
+    |> add_error(:name, "Already exist")
   end
 end
